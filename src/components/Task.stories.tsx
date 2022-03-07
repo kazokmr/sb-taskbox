@@ -1,35 +1,36 @@
-import { Task, TaskProps } from "./Task";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Task } from "./Task";
+import { ComponentMeta, ComponentStoryObj } from "@storybook/react";
 
 export default {
   component: Task,
   title: "Task",
 } as ComponentMeta<typeof Task>;
 
-const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  task: {
-    id: "1",
-    title: "Test Task",
-    state: "TASK_INBOX",
-    updateAt: new Date(2021, 0, 1, 9, 0),
+export const Default: ComponentStoryObj<typeof Task> = {
+  args: {
+    task: {
+      id: "1",
+      title: "Test Task",
+      state: "TASK_INBOX",
+      updateAt: new Date(2021, 0, 1, 9, 0),
+    },
   },
-} as TaskProps;
+};
 
-export const Pinned = Template.bind({});
-Pinned.args = {
-  task: {
-    ...Default.args.task,
-    state: "TASK_PINNED",
+export const Pinned: ComponentStoryObj<typeof Task> = {
+  args: {
+    task: {
+      ...Default.args?.task,
+      state: "TASK_PINNED",
+    },
   },
-} as TaskProps;
+};
 
-export const Archived = Template.bind({});
-Archived.args = {
-  task: {
-    ...Default.args.task,
-    state: "TASK_ARCHIVED",
+export const Archived: ComponentStoryObj<typeof Task> = {
+  args: {
+    task: {
+      ...Default.args?.task,
+      state: "TASK_ARCHIVED",
+    },
   },
-} as TaskProps;
+};

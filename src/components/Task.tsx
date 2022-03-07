@@ -1,10 +1,12 @@
+export interface TaskItem {
+  id: string;
+  title: string;
+  state: string;
+  updateAt?: Date;
+}
+
 export interface TaskProps {
-  task: {
-    id: string;
-    title: string;
-    state: string;
-    updateAt?: Date;
-  };
+  task: TaskItem;
   onArchiveTask: (id: string) => void;
   onPinTask: (id: string) => void;
 }
