@@ -1,4 +1,6 @@
 import { Task, TaskItem } from "./Task";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, updateTaskState } from "../lib/store";
 
 export interface TaskListProps {
   loading: boolean;
@@ -7,15 +9,32 @@ export interface TaskListProps {
   onArchiveTask: (id: string) => void;
 }
 
-export const TaskList = ({
-  loading = false,
-  tasks,
-  onPinTask,
-  onArchiveTask,
-}: TaskListProps) => {
-  const events = {
-    onPinTask,
-    onArchiveTask,
+export const TaskList = () => {
+  const tasks = useSelector((state: RootState) => {
+    const taskInOrder = [
+      ...state.taskbox.tasks.filter(
+        (task: TaskItem) => task.state === "TASK_PINNED"
+      ),
+      ...state.taskbox.tasks.filter(
+        (task: TaskItem) => task.state !== "TASK_PINNED"
+      ),
+    ];
+    return taskInOrder.filter(
+      (task: TaskItem) =>
+        task.state === "TASK_INBOX" || task.state === "TASK_PINNED"
+    );
+  });
+
+  const { status } = useSelector((state: RootState) => state.taskbox);
+
+  const dispatch = useDispatch();
+
+  const pinTask = (id: string) => {
+    dispatch(updateTaskState({ id, newTaskState: "TASK_PINNED" }));
+  };
+
+  const archiveTask = (id: string) => {
+    dispatch(updateTaskState({ id, newTaskState: "TASK_ARCHIVED" }));
   };
 
   const LoadingRow = (
@@ -27,7 +46,7 @@ export const TaskList = ({
     </div>
   );
 
-  if (loading) {
+  if (status === "loading") {
     return (
       <div className={"list-items"} data-textid={"loading"} key={"loading"}>
         {LoadingRow}
@@ -52,15 +71,15 @@ export const TaskList = ({
     );
   }
 
-  const tasksInOrder: TaskItem[] = [
-    ...tasks.filter((task) => task.state === "TASK_PINNED"),
-    ...tasks.filter((task) => task.state !== "TASK_PINNED"),
-  ];
-
   return (
-    <div className={"list-items"}>
-      {tasksInOrder.map((task) => (
-        <Task key={task.id} task={task} {...events} />
+    <div className={"list-items"} data-testid={"success"} key={"success"}>
+      {tasks.map((task: TaskItem) => (
+        <Task
+          key={task.id}
+          task={task}
+          onPinTask={(id: string) => pinTask(id)}
+          onArchiveTask={(id: string) => archiveTask(id)}
+        />
       ))}
     </div>
   );
