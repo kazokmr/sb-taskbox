@@ -3,19 +3,20 @@ import { Provider } from "react-redux";
 import store from "../lib/store";
 import { ComponentMeta, ComponentStoryObj } from "@storybook/react";
 import { rest } from "msw";
-import { MockedState } from "./TaskList.stories";
 import {
   userEvent,
   waitFor,
   waitForElementToBeRemoved,
   within,
 } from "@storybook/testing-library";
+import { MockedState } from "./MockedState";
 
-export default {
+const meta: ComponentMeta<typeof InboxScreen> = {
   component: InboxScreen,
   title: "InboxScreen",
   decorators: [(story) => <Provider store={store}>{story()}</Provider>],
-} as ComponentMeta<typeof InboxScreen>;
+};
+export default meta;
 
 export const Default: ComponentStoryObj<typeof InboxScreen> = {
   parameters: {

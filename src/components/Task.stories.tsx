@@ -1,10 +1,12 @@
-import { Task } from "./Task";
+import { Task, TaskItem } from "./Task";
 import { ComponentMeta, ComponentStoryObj } from "@storybook/react";
 
-export default {
+const meta: ComponentMeta<typeof Task> = {
   component: Task,
   title: "Task",
-} as ComponentMeta<typeof Task>;
+};
+
+export default meta;
 
 export const Default: ComponentStoryObj<typeof Task> = {
   args: {
@@ -20,7 +22,7 @@ export const Default: ComponentStoryObj<typeof Task> = {
 export const Pinned: ComponentStoryObj<typeof Task> = {
   args: {
     task: {
-      ...Default.args?.task,
+      ...(Default.args?.task as TaskItem),
       state: "TASK_PINNED",
     },
   },
@@ -29,7 +31,7 @@ export const Pinned: ComponentStoryObj<typeof Task> = {
 export const Archived: ComponentStoryObj<typeof Task> = {
   args: {
     task: {
-      ...Default.args?.task,
+      ...(Default.args?.task as TaskItem),
       state: "TASK_ARCHIVED",
     },
   },
