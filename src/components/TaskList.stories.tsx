@@ -7,7 +7,7 @@ import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TaskItem } from "./Task";
 import { ReactNode } from "react";
 
-const MockedState: TaskBox = {
+export const MockedState: TaskBox = {
   tasks: [
     { ...TaskStories.Default.args.task, id: "1", title: "Task 1" },
     { ...TaskStories.Default.args.task, id: "2", title: "Task 2" },
