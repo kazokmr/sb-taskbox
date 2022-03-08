@@ -48,7 +48,7 @@ export const TaskList = () => {
 
   if (status === "loading") {
     return (
-      <div className={"list-items"} data-textid={"loading"} key={"loading"}>
+      <div className={"list-items"} data-testid={"loading"} key={"loading"}>
         {LoadingRow}
         {LoadingRow}
         {LoadingRow}
@@ -61,7 +61,7 @@ export const TaskList = () => {
 
   if (tasks.length === 0) {
     return (
-      <div className={"list-items"} data-textid={"empty"} key={"empty"}>
+      <div className={"list-items"} data-testid={"empty"} key={"empty"}>
         <div className={"wrapper-message"}>
           <span className={"icon-check"} />
           <div className={"title-message"}>You have no tasks</div>
