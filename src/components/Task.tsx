@@ -11,6 +11,7 @@ export interface TaskProps {
   onPinTask: (id: string) => void;
 }
 
+
 export const Task = ({
   task: { id, title, state },
   onArchiveTask,
