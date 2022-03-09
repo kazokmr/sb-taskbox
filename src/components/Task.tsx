@@ -11,7 +11,6 @@ export interface TaskProps {
   onPinTask: (id: string) => void;
 }
 
-
 export const Task = ({
   task: { id, title, state },
   onArchiveTask,
@@ -39,6 +38,7 @@ export const Task = ({
           value={title}
           readOnly={true}
           placeholder={"Input title"}
+          style={{ textOverflow: "ellipsis" }}
         />
       </div>
       <div className={"actions"} onClick={(event) => event.stopPropagation()}>
