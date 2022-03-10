@@ -9,7 +9,7 @@ import {
   waitForElementToBeRemoved,
   within,
 } from "@storybook/testing-library";
-import { MockedState } from "./MockedState";
+import { templateTaskBox } from "./MockedStore";
 
 const meta: ComponentMeta<typeof InboxScreen> = {
   component: InboxScreen,
@@ -25,7 +25,7 @@ export const Default: ComponentStoryObj<typeof InboxScreen> = {
         rest.get(
           "https://jsonplaceholder.typicode.com/todos?userId=1",
           (req, res, ctx) => {
-            return res(ctx.json(MockedState.tasks));
+            return res(ctx.json(templateTaskBox.tasks));
           }
         ),
       ],

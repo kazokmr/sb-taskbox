@@ -1,23 +1,19 @@
 import { TaskList } from "./TaskList";
 import { ComponentMeta, ComponentStoryObj } from "@storybook/react";
-import store, { TaskBox, UpdateTaskPayload } from "../lib/store";
 import { Provider } from "react-redux";
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TaskItem } from "./Task";
-import { ReactNode } from "react";
-import { MockedState } from "./MockedState";
+import { mockStore, templateTaskBox } from "./MockedStore";
 
 const meta: ComponentMeta<typeof TaskList> = {
   component: TaskList,
   title: "TaskList",
   decorators: [(story) => <div style={{ padding: "3rem" }}>{story()}</div>],
-  excludeStories: /.*MockedState$/,
 };
 export default meta;
+
 export const Default: ComponentStoryObj<typeof TaskList> = {
   decorators: [
     // (story) => <Mockstore taskboxState={MockedState}>{story()}</Mockstore>,
-    (story) => <Provider store={store}>{story()}</Provider>,
+    (story) => <Provider store={mockStore()}>{story()}</Provider>,
   ],
 };
 
@@ -25,69 +21,29 @@ export const WithPinnedTasks: ComponentStoryObj<typeof TaskList> = {
   decorators: [
     (story) => {
       const pinnedTasks = [
-        ...MockedState.tasks.slice(0, 5),
+        ...templateTaskBox.tasks.slice(0, 5),
         { id: "6", title: "Task 6 (pinned)", state: "TASK_PINNED" },
       ];
-      return (
-        <Mockstore taskboxState={{ ...MockedState, tasks: pinnedTasks }}>
-          {story()}
-        </Mockstore>
-      );
+      const mockedStoreHasPinnedTasks = mockStore({ tasks: pinnedTasks });
+      return <Provider store={mockedStoreHasPinnedTasks}>{story()}</Provider>;
     },
   ],
 };
 
 export const Loading: ComponentStoryObj<typeof TaskList> = {
   decorators: [
-    (story) => (
-      <Mockstore taskboxState={{ ...MockedState, status: "loading" }}>
-        {story()}
-      </Mockstore>
-    ),
+    (story) => {
+      const mockedStoreHasLoadingStatus = mockStore({ status: "loading" });
+      return <Provider store={mockedStoreHasLoadingStatus}>{story()}</Provider>;
+    },
   ],
 };
 
 export const Empty: ComponentStoryObj<typeof TaskList> = {
   decorators: [
-    (story) => (
-      <Mockstore taskboxState={{ ...MockedState, tasks: [] }}>
-        {story()}
-      </Mockstore>
-    ),
+    (story) => {
+      const mockedStoreHasNoTasks = mockStore({ tasks: [] });
+      return <Provider store={mockedStoreHasNoTasks}>{story()}</Provider>;
+    },
   ],
 };
-
-const Mockstore = ({
-  taskboxState,
-  children,
-}: {
-  taskboxState: TaskBox;
-  children: ReactNode;
-}) => (
-  <Provider
-    store={configureStore({
-      reducer: {
-        taskbox: createSlice({
-          name: "taskbox",
-          initialState: taskboxState,
-          reducers: {
-            updateTaskState: (
-              state,
-              action: PayloadAction<UpdateTaskPayload>
-            ) => {
-              const { id, newTaskState } = action.payload;
-              const task = state.tasks.findIndex(
-                (task: TaskItem) => task.id === id
-              );
-              if (task >= 0) {
-                state.tasks[task].state = newTaskState;
-              }
-            },
-          },
-        }).reducer,
-      },
-    })}
-  >
-    {children}
-  </Provider>
-);
