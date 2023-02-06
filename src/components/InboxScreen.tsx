@@ -1,13 +1,15 @@
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {fetchTasks, RootState} from "../lib/store";
 import {useEffect} from "react";
 import {TaskList} from "./TaskList";
 
 export const InboxScreen = () => {
+    const dispatch = useDispatch();
     const {error} = useSelector((state: RootState) => state.taskbox);
 
     useEffect(() => {
-        fetchTasks()
+        // @ts-ignore
+        dispatch(fetchTasks())
     }, []);
 
     if (error) {
